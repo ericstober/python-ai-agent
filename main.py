@@ -10,6 +10,7 @@ def main():
     # Capture user input
     parser = argparse.ArgumentParser(description="Chatbot")
     parser.add_argument("user_prompt", type=str, help="User prompt")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
     # load environment variables from .env
@@ -36,9 +37,11 @@ def main():
     if not response.usage_metadata:
         raise RuntimeError("Gemini API response appears to be malformed")
 
-    # Print token metadata
-    print("Prompt tokens:", response.usage_metadata.prompt_token_count)
-    print("Response tokens:", response.usage_metadata.candidates_token_count)
+    # If verbose output is enabled print metadata
+    if args.verbose:
+        print("User prompt:", args.user_prompt)
+        print("Prompt tokens:", response.usage_metadata.prompt_token_count)
+        print("Response tokens:", response.usage_metadata.candidates_token_count)
 
     # Print response
     print("Response:")
