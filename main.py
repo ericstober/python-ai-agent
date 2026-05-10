@@ -1,6 +1,9 @@
-import os, argparse
+import argparse
+import os
+
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 
 def main():
@@ -20,10 +23,13 @@ def main():
     # Create new instance of a Gemini client
     client = genai.Client(api_key=api_key)
 
+    # Create list of user's prompts
+    messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
+
     # Call Gemini client with model and prompt. Captured as response
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=args.user_prompt,
+        contents=messages,
     )
 
     # Check for token metadata
